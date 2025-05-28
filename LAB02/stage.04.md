@@ -35,9 +35,24 @@ metadata:
     app: backend
 spec:
   containers:
-  - name: busybox
-    image: busybox
-    command: ["sh", "-c", "sleep 3600"]
+  - name: nginx
+    image: nginx
+```
+
+
+---
+# service-backend.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: backend-service
+spec:
+  selector:
+    app: backend
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 80
 ```
 
 ### 2. NetworkPolicy que bloquea todo por defecto
@@ -90,7 +105,7 @@ kubectl apply -f pod-backend.yaml
 
 ```bash
 kubectl exec -it pod-frontend -n seguridad -- sh
-wget -O - pod-backend.seguridad.svc.cluster.local
+wget -O - backend-service.seguridad.svc.cluster.local
 ```
 
 (debería funcionar antes de aplicar la política)
@@ -105,7 +120,7 @@ kubectl apply -f deny-all.yaml
 
 ```bash
 kubectl exec -it pod-frontend -n seguridad -- sh
-wget -O - pod-backend.seguridad.svc.cluster.local
+wget -O - backend-service.seguridad.svc.cluster.local
 ```
 
 (esto debería fallar ahora)
