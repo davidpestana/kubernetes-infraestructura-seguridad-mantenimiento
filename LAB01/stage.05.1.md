@@ -110,14 +110,22 @@ kubectl logs -l app=nginx -n deploy-test --tail=5
 2. **Agregar `add_header` en NGINX**  
    Usar imagen custom o ConfigMap con:
    ```nginx
-   server {
-       listen 80;
-       location / {
-           add_header X-Pod-Name "$hostname";
-           root /usr/share/nginx/html;
-           index index.html;
-       }
-   }
+  worker_processes 1;
+
+events {
+  worker_connections 1024;
+}
+
+http {
+  server {
+    listen 80;
+    location / {
+      add_header X-Pod-Name "$hostname";
+      root /usr/share/nginx/html;
+      index index.html;
+    }
+  }
+}
    ```
 
 ---
