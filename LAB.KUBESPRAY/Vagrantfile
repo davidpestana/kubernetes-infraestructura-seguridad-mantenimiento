@@ -1,0 +1,18 @@
+Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
+  NODES.each do |node|
+    config.vm.define node[:name] do |node_config|
+      node_config.vm.box = "ubuntu/jammy64"
+      node_config.vm.hostname = node[:name]
+      node_config.vm.network :private_network, ip: node[:ip]
+      node_config.vm.provider :virtualbox do |vb|
+        vb.memory = node[:memory]
+        vb.cpus = node[:cpus]
+      end
+
+      # Bootstrap Ansible en la máquina tower
+      if node[:name] == "tower"
+        node_config.vm.provision "shell", path: "bootstrap/install_ansible.sh"
+      end
+    end
+  end
+end
