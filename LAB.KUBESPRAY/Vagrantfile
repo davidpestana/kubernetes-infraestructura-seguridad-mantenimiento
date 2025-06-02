@@ -1,3 +1,12 @@
+VAGRANTFILE_API_VERSION = "2"
+
+NODES = [
+  { :name => "tower",  :ip => "192.168.56.10", :cpus => 2, :memory => 2048 },
+  { :name => "node1",  :ip => "192.168.56.11", :cpus => 2, :memory => 2048 },
+  { :name => "node2",  :ip => "192.168.56.12", :cpus => 2, :memory => 2048 },
+  { :name => "node3",  :ip => "192.168.56.13", :cpus => 2, :memory => 2048 }
+]
+
 Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   NODES.each do |node|
     config.vm.define node[:name] do |node_config|
